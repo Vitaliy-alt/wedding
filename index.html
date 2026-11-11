@@ -44,7 +44,6 @@
         .font-script-custom {
             font-family: 'Alex Brush', cursive;
         }
-        /* Glassmorphic / Overlay effects */
         .hero-overlay {
             background: linear-gradient(180deg, rgba(20, 15, 16, 0.45) 0%, rgba(25, 18, 20, 0.65) 100%);
         }
@@ -56,14 +55,11 @@
             height: 1px;
             background: rgba(74, 46, 53, 0.2);
         }
-        /* Custom radio styling */
         .radio-btn-selected {
             background-color: #4A2E35 !important;
             color: #FFFFFF !important;
             border-color: #4A2E35 !important;
         }
-
-        /* Equalizer Animation for Audio Player */
         .eq-bar {
             transform-origin: bottom;
             animation: bounce-eq 1.2s ease-in-out infinite alternate;
@@ -71,7 +67,6 @@
         .eq-bar-1 { animation-delay: 0.1s; }
         .eq-bar-2 { animation-delay: 0.4s; }
         .eq-bar-3 { animation-delay: 0.2s; }
-
         @keyframes bounce-eq {
             0% { transform: scaleY(0.2); }
             100% { transform: scaleY(1); }
@@ -171,8 +166,9 @@
                 ДОРОГИЕ РОДНЫЕ И ДРУЗЬЯ
             </p>
             <h2 class="font-serif-custom text-3xl md:text-5xl text-wedding-burgundy font-normal mb-8 leading-snug">
-                Один день. <br/>
-                Одна любовь. <span class="font-script-custom text-4xl md:text-6xl text-wedding-burgundy font-normal not-italic block mt-2">Навсегда.</span>
+                Один день.<br/>
+                Одна любовь.<br/>
+                Навсегда.
             </h2>
             <div class="line-accent-dark w-12 mx-auto mb-8"></div>
             <p class="text-base md:text-lg text-wedding-text-muted leading-relaxed font-light">
@@ -281,8 +277,8 @@
         <div class="max-w-xl mx-auto text-center">
             <div class="rounded-3xl overflow-hidden shadow-xl border border-stone-200/60 relative">
                 <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80" alt="Свадебный букет" class="w-full h-auto object-cover aspect-[4/5] brightness-95">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-center pb-8 px-4">
-                    <p class="font-script-custom text-3xl md:text-4xl text-white font-light tracking-wide">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex items-end justify-end pb-6 pr-6">
+                    <p class="font-script-custom text-2xl md:text-3xl text-white font-light tracking-wide italic opacity-95">
                         до встречи в июне
                     </p>
                 </div>
@@ -385,12 +381,13 @@
                 <p class="text-xs uppercase tracking-[0.25em] text-wedding-text-muted mb-3">
                     НАШЕ ПОЖЕЛАНИЕ
                 </p>
-                <h3 class="font-serif-custom text-3xl md:text-4xl text-wedding-burgundy font-normal mb-4">
-                    Дресс-код <br/>
-                    <span class="italic font-light">и настроение</span>
+                <h3 class="font-serif-custom text-3xl md:text-4xl text-wedding-burgundy font-normal mb-4 leading-snug">
+                    Приходите нарядными<br/>
+                    и весёлыми
                 </h3>
                 <p class="text-sm md:text-base text-wedding-text-muted leading-relaxed font-light max-w-lg mx-auto">
-                    Мы будем рады, если вы поддержите палитру нашей свадьбы в своих нарядах. Главное — ваше прекрасное настроение и готовность разделить с нами этот день!
+                    Берите с собой хорошее настроение, улыбки и готовность танцевать до самого вечера.<br/>
+                    Всё остальное мы подготовим!
                 </p>
             </div>
 
@@ -503,7 +500,6 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // --- MUSIC LOGIC ---
         const bgMusic = document.getElementById('bgMusic');
         const playingIcon = document.getElementById('playingIcon');
         const pausedIcon = document.getElementById('pausedIcon');
@@ -550,7 +546,7 @@
         document.addEventListener('scroll', enableAudioOnFirstTouch);
 
         // --- COUNTDOWN TIMER LOGIC ---
-        const weddingDate = new Date('2027-06-05T16:30:00');
+        const weddingDate = new Date('2027-06-05T15:30:00');
 
         function updateCountdown() {
             const now = new Date();
@@ -572,7 +568,7 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // --- RSVP FORM & GOOGLE APPS SCRIPT LOGIC ---
+        // --- RSVP FORM LOGIC (GOOGLE APPS SCRIPT INTEGRATION) ---
         let isAttending = true;
 
         function selectAttendance(attending) {
@@ -589,45 +585,46 @@
             }
         }
 
-        async function handleRSVPSubmit(e) {
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfO2c5F1yL3P7M5L2lO9X5hP1xL7h1Q2v3s4k5/exec';
+
+        function handleRSVPSubmit(e) {
             e.preventDefault();
             const name = document.getElementById('guestName').value;
             const comment = document.getElementById('guestComment').value;
-            const status = isAttending ? 'Да, с радостью' : 'К сожалению, нет';
-
-            // Ваш URL веб-приложения Google Apps Script
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzT94uj1ib9w1mhKg9kKcBrpknaVafwFBKXQ9iRc6TAC-ZNZhbkggnN8uZ8DT2MLxuu/exec';
+            const status = isAttending ? "Да, с радостью" : "К сожалению, нет";
 
             const formData = new URLSearchParams();
             formData.append('name', name);
             formData.append('status', status);
             formData.append('comment', comment);
 
-            try {
-                await fetch(scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: formData
-                });
-            } catch (err) {
-                console.error('Error sending RSVP:', err);
-            }
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formData.toString()
+            }).then(() => {
+                const modalText = document.getElementById('modalText');
+                if (isAttending) {
+                    modalText.innerText = `Спасибо, ${name}! Мы очень счастливы, что вы будете с нами в этот особенный день!`;
+                } else {
+                    modalText.innerText = `Спасибо за ответ, ${name}! Жаль, что вы не сможете прийти, но мы ценим ваше внимание.`;
+                }
 
-            const modalText = document.getElementById('modalText');
-            if (isAttending) {
-                modalText.innerText = `Спасибо, ${name}! Мы очень счастливы, что вы будете с нами в этот особенный день!`;
-            } else {
-                modalText.innerText = `Спасибо за ответ, ${name}! Жаль, что вы не сможете прийти, но мы ценим ваше внимание.`;
-            }
-
-            const modal = document.getElementById('successModal');
-            const modalCard = document.getElementById('modalCard');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                modalCard.classList.remove('scale-95');
-                modalCard.classList.add('scale-100');
-            }, 10);
+                const modal = document.getElementById('successModal');
+                const modalCard = document.getElementById('modalCard');
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modalCard.classList.remove('scale-95');
+                    modalCard.classList.add('scale-100');
+                }, 10);
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.');
+            });
         }
 
         function closeModal() {
@@ -652,7 +649,7 @@ PRODID:-//Vitaliy & Yulia Wedding//RU
 BEGIN:VEVENT
 SUMMARY:Свадьба Виталия и Юлии
 DESCRIPTION:Приглашаем на свадьбу Виталия и Юлии! Сбор гостей в 16:30, Церемония в 17:00.
-LOCATION:Шатёр ресторана Mariyam, ул. Базовая, 8/1, Усть-Каменогорск
+LOCATION:Шатёр ресторана Mariyam, улица Базовая 8/1, Усть-Каменогорск
 DTSTART:20270605T163000
 DTEND:20270605T235900
 END:VEVENT
