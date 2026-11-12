@@ -500,7 +500,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+  <!-- JAVASCRIPT LOGIC -->
     <script>
         const bgMusic = document.getElementById('bgMusic');
         const playingIcon = document.getElementById('playingIcon');
@@ -591,6 +591,18 @@
 
         function handleRSVPSubmit(e) {
             e.preventDefault();
+
+            // Находим кнопку отправки внутри формы
+            const submitBtn = e.target.querySelector('button[type="submit"]') || document.getElementById('submitBtn');
+            
+            // Блокируем кнопку от повторных кликов
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                submitBtn.dataset.originalText = submitBtn.innerText;
+                submitBtn.innerText = 'Отправка...';
+            }
+
             const name = document.getElementById('guestName').value;
             const comment = document.getElementById('guestComment').value;
             const status = isAttending ? "Да, с радостью" : "К сожалению, нет";
@@ -626,6 +638,13 @@
             }).catch(error => {
                 console.error('Error:', error);
                 alert('Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.');
+            }).finally(() => {
+                // Возвращаем кнопку в исходное состояние
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    submitBtn.innerText = submitBtn.dataset.originalText || 'Отправить';
+                }
             });
         }
 
